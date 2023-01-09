@@ -1,11 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import './App.scss';
+import Ludo from './features/ludo/ludo';
 
 function App() {
   return (
     <div className="App">
+      <Ludo></Ludo>
     </div>
   );
 }
