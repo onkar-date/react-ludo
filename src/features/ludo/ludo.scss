@@ -1,23 +1,58 @@
-$cell-dimension: 45px;
+$cell-dimension: 42px;
 $home-dimension: calc(6 * $cell-dimension);
 $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
+.game {
+    margin-left: calc($cell-dimension);
+    margin-top: calc($cell-dimension);
+}
 .wrapper {
     .section {
         display: flex;
         .playerHome {
             width: $home-dimension;
             height: $home-dimension;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            .innerDiv {
+                height: calc(4 * $cell-dimension);
+                width: calc(4 * $cell-dimension);
+                background-color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                border: 1px solid black;
+                .playerPlaceholder {
+                    width: $cell-dimension;
+                    height: $cell-dimension;
+                    border: 1px solid black;
+                    border-radius: 50%;
+                }
+            }
             &.topGreen {
                 background-color: green;
+                .playerPlaceholder {
+                    background-color: green;
+                }
             }
             &.topYellow {
                 background-color: yellow;
+                .playerPlaceholder {
+                    background-color: yellow;
+                }
             }
             &.bottomRed {
                 background-color: red;
+                .playerPlaceholder {
+                    background-color: red;
+                }
             }
             &.bottomBlue {
                 background-color: blue;
+                .playerPlaceholder {
+                    background-color: blue;
+                }
             }
         }
         .pathColumnSection {
@@ -33,12 +68,55 @@ $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
         .cell {
             width: $cell-dimension;
             height: $cell-dimension;
-            border: 1px solid gray;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
     .section.middleSection {
         .winningArea {
             width: $winning-area-dimension;
+
+            border: 1px solid black;
         }
     }
+}
+
+.player {
+    height: calc($cell-dimension / 1.5);
+    width: calc($cell-dimension / 1.5);
+    border-radius: 50%;
+    border: 3px solid black;
+    position: absolute;
+    transition: all 0.5s ease;
+    &.greenPlayer {
+        background-color: green;
+        &.player-1 {
+            top: 113px;
+            left: 119px;
+        }
+        &.player-2 {
+            top: calc($cell-dimension * 2.5 + 8px);
+            left: 189px;
+        }
+        &.player-3 {
+            top: 195px;
+            left: calc($cell-dimension * 2.5 + 14px);
+        }
+        &.player-4 {
+            top: 195px;
+            left: 189px;
+        }
+    }
+}
+.greenPlayer1 {
+    height: calc($cell-dimension / 1.5);
+    width: calc($cell-dimension / 1.5);
+    border-radius: 50%;
+    background-color: orange;
+    position: absolute;
+    top: calc($cell-dimension * 2.5 + 8px);
+    left: calc($cell-dimension * 2.5 + 14px);
+    transition: all 0.5s ease;
 }
