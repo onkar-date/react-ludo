@@ -1,0 +1,44 @@
+$cell-dimension: 45px;
+$home-dimension: calc(6 * $cell-dimension);
+$winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
+.wrapper {
+    .section {
+        display: flex;
+        .playerHome {
+            width: $home-dimension;
+            height: $home-dimension;
+            &.topGreen {
+                background-color: green;
+            }
+            &.topYellow {
+                background-color: yellow;
+            }
+            &.bottomRed {
+                background-color: red;
+            }
+            &.bottomBlue {
+                background-color: blue;
+            }
+        }
+        .pathColumnSection {
+            display: flex;
+            .pathColumn {
+            }
+        }
+        .pathRowSection {
+            .pathRow {
+                display: flex;
+            }
+        }
+        .cell {
+            width: $cell-dimension;
+            height: $cell-dimension;
+            border: 1px solid gray;
+        }
+    }
+    .section.middleSection {
+        .winningArea {
+            width: $winning-area-dimension;
+        }
+    }
+}
