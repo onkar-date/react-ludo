@@ -1,10 +1,29 @@
 $cell-dimension: 42px;
 $home-dimension: calc(6 * $cell-dimension);
 $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
+$offset: 55px;
 .game {
     margin-left: calc($cell-dimension);
     margin-top: calc($cell-dimension);
+    display: flex;
+    .dice-section {
+        width: 100%;
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
 }
+
+@media only screen and (max-width: 992px) {
+    .game {
+        display: block;
+        .dice-section {
+            margin-left: 0;
+            margin-top: 2rem;
+            width: $cell-dimension * 15;
+        }
+    }
+}
+
 .wrapper {
     .section {
         display: flex;
@@ -117,76 +136,76 @@ $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
     &.greenPlayer {
         background-color: green;
         &.player-1 {
-            top: 113px;
+            top: 113px + $offset;
             left: 119px;
         }
         &.player-2 {
-            top: 113px;
+            top: 113px + $offset;
             left: 189px;
         }
         &.player-3 {
-            top: 195px;
+            top: 195px + $offset;
             left: calc($cell-dimension * 2.5 + 14px);
         }
         &.player-4 {
-            top: 195px;
+            top: 195px + $offset;
             left: 189px;
         }
     }
     &.yellowPlayer {
         background-color: yellow;
         &.player-1 {
-            top: 113px;
+            top: 113px + $offset;
             left: 497px;
         }
         &.player-2 {
-            top: 113px;
+            top: 113px + $offset;
             left: 566px;
         }
         &.player-3 {
-            top: 195px;
+            top: 195px + $offset;
             left: 497px;
         }
         &.player-4 {
-            top: 195px;
+            top: 195px + $offset;
             left: 566px;
         }
     }
     &.bluePlayer {
         background-color: blue;
         &.player-1 {
-            top: 490px;
+            top: 490px + $offset;
             left: 497px;
         }
         &.player-2 {
-            top: 490px;
+            top: 490px + $offset;
             left: 566px;
         }
         &.player-3 {
-            top: 574px;
+            top: 574px + $offset;
             left: 497px;
         }
         &.player-4 {
-            top: 574px;
+            top: 574px + $offset;
             left: 566px;
         }
     }
     &.redPlayer {
         background-color: red;
         &.player-1 {
-            top: 490px;
+            top: 490px + $offset;
             left: 120px;
         }
         &.player-2 {
-            top: 490px;
+            top: 490px + $offset;
             left: 189px;
         }
         &.player-3 {
-            top: 574px;
+            top: 574px + $offset;
             left: 120px;
         }
         &.player-4 {
-            top: 574px;
+            top: 574px + $offset;
             left: 189px;
         }
     }
