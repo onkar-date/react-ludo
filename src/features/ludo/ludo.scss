@@ -77,8 +77,32 @@ $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
     .section.middleSection {
         .winningArea {
             width: $winning-area-dimension;
-
-            border: 1px solid black;
+            .greenWinArea {
+                position: absolute;
+                border-top: 63px solid transparent;
+                border-left: 63px solid green;
+                border-bottom: 63px solid transparent;
+            }
+            .yellowWinArea {
+                position: absolute;
+                border-left: 63px solid transparent;
+                border-right: 63px solid transparent;
+                border-top: 63px solid yellow;
+            }
+            .blueWinArea {
+                position: absolute;
+                border-bottom: 63px solid transparent;
+                border-top: 63px solid transparent;
+                border-right: 63px solid blue;
+                border-left: 63px solid transparent;
+            }
+            .redWinArea {
+                position: absolute;
+                border-top: 63px solid transparent;
+                border-left: 63px solid transparent;
+                border-right: 63px solid transparent;
+                border-bottom: 63px solid red;
+            }
         }
     }
 }
@@ -97,7 +121,7 @@ $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
             left: 119px;
         }
         &.player-2 {
-            top: calc($cell-dimension * 2.5 + 8px);
+            top: 113px;
             left: 189px;
         }
         &.player-3 {
@@ -109,14 +133,107 @@ $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
             left: 189px;
         }
     }
+    &.yellowPlayer {
+        background-color: yellow;
+        &.player-1 {
+            top: 113px;
+            left: 497px;
+        }
+        &.player-2 {
+            top: 113px;
+            left: 566px;
+        }
+        &.player-3 {
+            top: 195px;
+            left: 497px;
+        }
+        &.player-4 {
+            top: 195px;
+            left: 566px;
+        }
+    }
+    &.bluePlayer {
+        background-color: blue;
+        &.player-1 {
+            top: 490px;
+            left: 497px;
+        }
+        &.player-2 {
+            top: 490px;
+            left: 566px;
+        }
+        &.player-3 {
+            top: 574px;
+            left: 497px;
+        }
+        &.player-4 {
+            top: 574px;
+            left: 566px;
+        }
+    }
+    &.redPlayer {
+        background-color: red;
+        &.player-1 {
+            top: 490px;
+            left: 120px;
+        }
+        &.player-2 {
+            top: 490px;
+            left: 189px;
+        }
+        &.player-3 {
+            top: 574px;
+            left: 120px;
+        }
+        &.player-4 {
+            top: 574px;
+            left: 189px;
+        }
+    }
 }
-.greenPlayer1 {
+
+.safeHouse {
+    z-index: 2;
+}
+
+.greenBg {
+    background-color: green;
+}
+
+.yellowBg {
+    background-color: yellow;
+}
+
+.blueBg {
+    background-color: blue;
+}
+
+.redBg {
+    background-color: red;
+}
+
+.diceResult {
+    width: 50%;
+    height: 200px;
+    border: 1px solid;
+    margin: 2rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+.playerTableWrapper {
+    display: flex;
+    justify-content: center;
+    .playerTable {
+        width: 50%;
+    }
+}
+
+.playerIndicator {
     height: calc($cell-dimension / 1.5);
     width: calc($cell-dimension / 1.5);
     border-radius: 50%;
-    background-color: orange;
-    position: absolute;
-    top: calc($cell-dimension * 2.5 + 8px);
-    left: calc($cell-dimension * 2.5 + 14px);
-    transition: all 0.5s ease;
+    border: 2px solid;
 }

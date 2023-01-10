@@ -2,208 +2,183 @@ import { useState, useEffect } from "react";
 import "./ludo.scss";
 import { BiStar } from "react-icons/bi";
 import { Button } from "react-bootstrap";
+import { BLUE_ROUTES, GREEN_ROUTES, PLAYER, RED_ROUTES, YELLOW_ROUTES } from "./ludo.constants";
+import LudoPlayerIndicatorTable from "./PlayerIndicatorTable/LudoPlayerIndicatorTable";
+import Dice from "./Dice/Dice";
 
 interface stateInterface {
   [key: string]: any,
-  playingColor: string,
-  selectedPlayer: string,
-  diceRolled: number,
-  playerData: any
 }
 const Ludo = () => {
-  const PLAYER = {
-    green: 'green',
-    yellow: 'yellow',
-    blue: 'blue',
-    red: 'red',
-  };
-  const PLAYER_TURNS = [PLAYER.green, PLAYER.yellow, PLAYER.blue, PLAYER.red];
-  const [gameData, setGameData] = useState<stateInterface>({
-    playingColor: PLAYER.red,
-    selectedPlayer: 'player1',
-    diceRolled: 0,
-    playerData: {
-      green: {
-        player1: {
-          currentPosition: 0
-        },
-        player2: {
-          currentPosition: 0
-        },
-        player3: {
-          currentPosition: 0
-        },
-        player4: {
-          currentPosition: 0
-        },
-        routes: [
-          { left: 2, top: 7 },
-          { left: 3, top: 7 },
-          { left: 4, top: 7 },
-          { left: 5, top: 7 },
-          { left: 6, top: 7 },
-          { left: 7, top: 6 },
-          { left: 7, top: 5 },
-          { left: 7, top: 4 },
-          { left: 7, top: 3 },
-          { left: 7, top: 2 },
-          { left: 7, top: 1 },
-          { left: 8, top: 1 },
-          { left: 9, top: 1 },
-          { left: 9, top: 2 },
-          { left: 9, top: 3 },
-          { left: 9, top: 4 },
-          { left: 9, top: 5 },
-          { left: 9, top: 6 },
-          { left: 10, top: 7 },
-          { left: 11, top: 7 },
-          { left: 12, top: 7 },
-          { left: 13, top: 7 },
-          { left: 14, top: 7 },
-          { left: 15, top: 7 },
-          { left: 15, top: 8 },
-          { left: 15, top: 9 },
-          { left: 14, top: 9 },
-          { left: 13, top: 9 },
-          { left: 12, top: 9 },
-          { left: 11, top: 9 },
-          { left: 10, top: 9 },
-          { left: 9, top: 10 },
-          { left: 9, top: 11 },
-          { left: 9, top: 12 },
-          { left: 9, top: 13 },
-          { left: 9, top: 14 },
-          { left: 9, top: 15 },
-          { left: 8, top: 15 },
-          { left: 7, top: 15 },
-          { left: 7, top: 14 },
-          { left: 7, top: 13 },
-          { left: 7, top: 12 },
-          { left: 7, top: 11 },
-          { left: 7, top: 10 },
-          { left: 6, top: 9 },
-          { left: 5, top: 9 },
-          { left: 4, top: 9 },
-          { left: 3, top: 9 },
-          { left: 2, top: 9 },
-          { left: 1, top: 9 },
-          { left: 1, top: 8 },
-          { left: 2, top: 8 },
-          { left: 3, top: 8 },
-          { left: 4, top: 8 },
-          { left: 5, top: 8 },
-          { left: 6, top: 8 }
-        ],
-      },
-    }
-  });
 
-  const greenBg = {
-    backgroundColor: "green",
-  };
-  const yellowBg = {
-    backgroundColor: "yellow",
-  };
-  const redBg = {
-    backgroundColor: "red",
-  };
-  const blueBg = {
-    backgroundColor: "blue",
-  };
   const basicUnit = 42;
   const delta = 7;
-  const playRound = (playingColor: string, rolledNumbers: number) => {
-    const selectedPlayer = gameData.selectedPlayer;
-    const player = document.getElementById(`${playingColor}-${selectedPlayer}`);
+  const PLAYER_TURNS = [PLAYER.green, PLAYER.yellow, PLAYER.blue, PLAYER.red];
+  const [gameData, setGameData] = useState<stateInterface>({
+    green: {
+      player1: { currentPosition: -1 },
+      player2: { currentPosition: -1 },
+      player3: { currentPosition: -1 },
+      player4: { currentPosition: -1 },
+      routes: GREEN_ROUTES,
+    },
+    yellow: {
+      player1: { currentPosition: -1 },
+      player2: { currentPosition: -1 },
+      player3: { currentPosition: -1 },
+      player4: { currentPosition: -1 },
+      routes: YELLOW_ROUTES,
+    },
+    blue: {
+      player1: { currentPosition: -1 },
+      player2: { currentPosition: -1 },
+      player3: { currentPosition: -1 },
+      player4: { currentPosition: -1 },
+      routes: BLUE_ROUTES,
+    },
+    red: {
+      player1: { currentPosition: -1 },
+      player2: { currentPosition: -1 },
+      player3: { currentPosition: -1 },
+      player4: { currentPosition: -1 },
+      routes: RED_ROUTES,
+    },
+  });
+  const [currentlyPlaying, setCurrentlyPlaying] = useState({
+    color: PLAYER.green,
+    name: ''
+  });
+  const [diceRolled, setDiceRolled] = useState<number | null>(null);
+  const [roundStatus, setRoundStatus] = useState<string>('idle');
+
+  useEffect(() => {
+    if (roundStatus === 'started') {
+      playRound();
+    }
+  }, [roundStatus]);
+
+  const playRound = () => {
+    const player = document.getElementById(`${currentlyPlaying.color}-${currentlyPlaying.name}`);
     if (player) {
-
-      player.style.top = getPosition(
-        playingColor,
-        selectedPlayer,
-        rolledNumbers,
-        true
-      );
-      player.style.left = getPosition(
-        playingColor,
-        selectedPlayer,
-        rolledNumbers,
-        false
-      );
-      updateGameData(playingColor, selectedPlayer, rolledNumbers);
+      player.style.top = getNewPosition(true);
+      player.style.left = getNewPosition(false);
+      updateGameData();
     }
   };
 
-  const getPosition = (
-    playerColor: string,
-    playerNumber: string,
-    moveBy: number,
-    top: boolean
-  ): string => {
-    const routes = gameData.playerData[playerColor].routes as any;
-    const newPosition = routes[gameData.playerData[playerColor][playerNumber].currentPosition + moveBy];
-
-    if (top) {
-      console.log(newPosition);
-
-      return `${(newPosition.top * basicUnit) + delta}px`;
+  const getNewPosition = (top: boolean): string => {
+    const routes = gameData[currentlyPlaying.color].routes;
+    const currentPosition = getSelectedPlayerPosition();
+    const newPosition = routes[gameData[currentlyPlaying.color][currentlyPlaying.name].currentPosition + diceRolled];
+    if (currentPosition === -1) {
+      if (diceRolled === 6) {
+        const firstPosition = routes[0];
+        return top ? `${(firstPosition.top * basicUnit) + delta}px` : `${(firstPosition.left * basicUnit) + delta}px`;
+      } else {
+        return '';
+      }
     } else {
-      return `${(newPosition.left * basicUnit) + delta}px`;
+      if (top) {
+        return `${(newPosition.top * basicUnit) + delta}px`;
+      } else {
+        return `${(newPosition.left * basicUnit) + delta}px`;
+      }
     }
+
   };
 
-  const updateGameData = (playingColor: string, selectedPlayer: string, rolledNumbers: number) => {
+  const updateGameData = () => {
     setGameData((prev) => {
+      const updatedPosition = getUpdatedPosition();
       const updated = {
         ...prev,
-        playerData: {
-          ...prev.playerData,
-          [playingColor]: {
-            ...prev.playerData[playingColor],
-            [selectedPlayer]: {
-              ...prev.playerData[playingColor][selectedPlayer],
-              currentPosition: prev.playerData[playingColor][selectedPlayer].currentPosition + rolledNumbers
-            }
-          },
-          diceRolled: rolledNumbers
-        }
+        [currentlyPlaying.color]: {
+          ...prev[currentlyPlaying.color],
+          [currentlyPlaying.name]: {
+            ...prev[currentlyPlaying.color][currentlyPlaying.name],
+            currentPosition: updatedPosition
+          }
+        },
       };
       console.log("updated = ", updated);
       return updated;
+    });
+    setDiceRolled(null);
+    setRoundStatus('idle');
+    setCurrentlyPlaying({
+      color: getNextPlayingColor(),
+      name: ''
     })
   }
 
-  const startRound = () => {
-    const playingColor = getPlayingColor();
-    const rolledNumbers = rollDice();
-    playRound(playingColor, rolledNumbers);
-  }
-
-  const rollDice = (): number => {
-    const rndInt = Math.floor(Math.random() * 6) + 1;
-    console.log("rolled = ", rndInt);
-    return rndInt;
-  }
-
-  const getPlayingColor = () => {
-    return PLAYER.green;
-    if (gameData.diceRolled !== 6) {
-      return PLAYER_TURNS[PLAYER_TURNS.indexOf(gameData.playingColor) + 1] || PLAYER_TURNS[0];
+  const getUpdatedPosition = (): number => {
+    const currentPosition = getSelectedPlayerPosition();
+    if (currentPosition === -1) {
+      if (diceRolled === 6) {
+        return 0;
+      } else {
+        return -1;
+      }
     } else {
-      return gameData.playingColor;
+      return gameData[currentlyPlaying.color][currentlyPlaying.name].currentPosition + diceRolled;
+    }
+
+  }
+
+  const getNextPlayingColor = (): string => {
+    if (diceRolled !== 6) {
+      console.log('next turn = ', PLAYER_TURNS[PLAYER_TURNS.indexOf(currentlyPlaying.color) + 1] || PLAYER_TURNS[0]);
+
+      return PLAYER_TURNS[PLAYER_TURNS.indexOf(currentlyPlaying.color) + 1] || PLAYER_TURNS[0];
+    } else {
+      return currentlyPlaying.color;
     }
   }
 
-  const setPlayer = () => {
+  const rollDice = () => {
+    setDiceRolled(Math.floor(Math.random() * 6) + 1);
+  }
 
+  const setPlayerToMove = (colorSelectedForPlaying: string, playerName: string) => {
+    if (currentlyPlaying.color === colorSelectedForPlaying && diceRolled !== null) {
+      setCurrentlyPlaying({
+        color: colorSelectedForPlaying,
+        name: playerName
+      });
+      setRoundStatus('started');
+    }
+  }
+
+  const getSelectedPlayerPosition = (): number => {
+    const player = gameData[currentlyPlaying.color];
+    return player[currentlyPlaying.name].currentPosition;
   }
 
   return (
-    <div className="game">
+    <div className="game d-flex">
       {/* Green Player */}
-      <div className="player greenPlayer player-1" id="green-player1"></div>
-      <div className="player greenPlayer player-2" id="green-player2"></div>
-      <div className="player greenPlayer player-3" id="green-player3"></div>
-      <div className="player greenPlayer player-4" id="green-player4"></div>
+      <div className="player greenPlayer player-1" id="green-player1" onClick={() => setPlayerToMove(PLAYER.green, 'player1')}></div>
+      <div className="player greenPlayer player-2" id="green-player2" onClick={() => setPlayerToMove(PLAYER.green, 'player2')}></div>
+      <div className="player greenPlayer player-3" id="green-player3" onClick={() => setPlayerToMove(PLAYER.green, 'player3')}></div>
+      <div className="player greenPlayer player-4" id="green-player4" onClick={() => setPlayerToMove(PLAYER.green, 'player4')}></div>
+
+      {/* Yellow Player */}
+      <div className="player yellowPlayer player-1" id="yellow-player1" onClick={() => setPlayerToMove(PLAYER.yellow, 'player1')}></div>
+      <div className="player yellowPlayer player-2" id="yellow-player2" onClick={() => setPlayerToMove(PLAYER.yellow, 'player2')}></div>
+      <div className="player yellowPlayer player-3" id="yellow-player3" onClick={() => setPlayerToMove(PLAYER.yellow, 'player3')}></div>
+      <div className="player yellowPlayer player-4" id="yellow-player4" onClick={() => setPlayerToMove(PLAYER.yellow, 'player4')}></div>
+
+      {/* Blue Player */}
+      <div className="player bluePlayer player-1" id="blue-player1" onClick={() => setPlayerToMove(PLAYER.blue, 'player1')}></div>
+      <div className="player bluePlayer player-2" id="blue-player2" onClick={() => setPlayerToMove(PLAYER.blue, 'player2')}></div>
+      <div className="player bluePlayer player-3" id="blue-player3" onClick={() => setPlayerToMove(PLAYER.blue, 'player3')}></div>
+      <div className="player bluePlayer player-4" id="blue-player4" onClick={() => setPlayerToMove(PLAYER.blue, 'player4')}></div>
+
+      {/* Red Player */}
+      <div className="player redPlayer player-1" id="red-player1" onClick={() => setPlayerToMove(PLAYER.red, 'player1')}></div>
+      <div className="player redPlayer player-2" id="red-player2" onClick={() => setPlayerToMove(PLAYER.red, 'player2')}></div>
+      <div className="player redPlayer player-3" id="red-player3" onClick={() => setPlayerToMove(PLAYER.red, 'player3')}></div>
+      <div className="player redPlayer player-4" id="red-player4" onClick={() => setPlayerToMove(PLAYER.red, 'player4')}></div>
 
       <div className="wrapper">
         {/* Top Section */}
@@ -225,7 +200,7 @@ const Ludo = () => {
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell">
-                <BiStar size={"25px"} />
+                <BiStar size={"25px"} className="safeHouse" />
               </div>
               <div className="cell"></div>
               <div className="cell"></div>
@@ -233,15 +208,15 @@ const Ludo = () => {
             </div>
             <div className="pathColumn middleColumn">
               <div className="cell"></div>
-              <div className="cell" style={yellowBg}></div>
-              <div className="cell" style={yellowBg}></div>
-              <div className="cell" style={yellowBg}></div>
-              <div className="cell" style={yellowBg}></div>
-              <div className="cell" style={yellowBg}></div>
+              <div className="cell yellowBg"></div>
+              <div className="cell yellowBg"></div>
+              <div className="cell yellowBg"></div>
+              <div className="cell yellowBg"></div>
+              <div className="cell yellowBg"></div>
             </div>
             <div className="pathColumn rightColumn">
               <div className="cell"></div>
-              <div className="cell" style={yellowBg}></div>
+              <div className="cell yellowBg"></div>
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell"></div>
@@ -267,7 +242,7 @@ const Ludo = () => {
           <div className="pathRowSection middleLeft">
             <div className="pathRow">
               <div className="cell"></div>
-              <div className="cell" style={greenBg}></div>
+              <div className="cell greenBg"></div>
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell"></div>
@@ -275,41 +250,46 @@ const Ludo = () => {
             </div>
             <div className="pathRow">
               <div className="cell"></div>
-              <div className="cell" style={greenBg}></div>
-              <div className="cell" style={greenBg}></div>
-              <div className="cell" style={greenBg}></div>
-              <div className="cell" style={greenBg}></div>
-              <div className="cell" style={greenBg}></div>
+              <div className="cell greenBg"></div>
+              <div className="cell greenBg"></div>
+              <div className="cell greenBg"></div>
+              <div className="cell greenBg"></div>
+              <div className="cell greenBg"></div>
             </div>
             <div className="pathRow">
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell">
-                <BiStar size={"25px"} />
+                <BiStar size={"25px"} className="safeHouse" />
               </div>
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell"></div>
             </div>
           </div>
-          <div className="winningArea"></div>
+          <div className="winningArea">
+            <div className="greenWinArea"></div>
+            <div className="yellowWinArea"></div>
+            <div className="blueWinArea"></div>
+            <div className="redWinArea"></div>
+          </div>
           <div className="pathRowSection middleRight">
             <div className="pathRow">
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell">
-                <BiStar size={"25px"} />
+                <BiStar size={"25px"} className="safeHouse" />
               </div>
               <div className="cell"></div>
               <div className="cell"></div>
             </div>
             <div className="pathRow">
-              <div className="cell" style={blueBg}></div>
-              <div className="cell" style={blueBg}></div>
-              <div className="cell" style={blueBg}></div>
-              <div className="cell" style={blueBg}></div>
-              <div className="cell" style={blueBg}></div>
+              <div className="cell blueBg"></div>
+              <div className="cell blueBg"></div>
+              <div className="cell blueBg"></div>
+              <div className="cell blueBg"></div>
+              <div className="cell blueBg"></div>
               <div className="cell"></div>
             </div>
             <div className="pathRow">
@@ -317,7 +297,7 @@ const Ludo = () => {
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell"></div>
-              <div className="cell" style={blueBg}></div>
+              <div className="cell blueBg"></div>
               <div className="cell"></div>
             </div>
           </div>
@@ -343,15 +323,15 @@ const Ludo = () => {
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell"></div>
-              <div className="cell" style={redBg}></div>
+              <div className="cell redBg"></div>
               <div className="cell"></div>
             </div>
             <div className="pathColumn middleColumn">
-              <div className="cell" style={redBg}></div>
-              <div className="cell" style={redBg}></div>
-              <div className="cell" style={redBg}></div>
-              <div className="cell" style={redBg}></div>
-              <div className="cell" style={redBg}></div>
+              <div className="cell redBg"></div>
+              <div className="cell redBg"></div>
+              <div className="cell redBg"></div>
+              <div className="cell redBg"></div>
+              <div className="cell redBg"></div>
               <div className="cell"></div>
             </div>
             <div className="pathColumn rightColumn">
@@ -359,7 +339,7 @@ const Ludo = () => {
               <div className="cell"></div>
               <div className="cell"></div>
               <div className="cell">
-                <BiStar size={"25px"} />
+                <BiStar size={"25px"} className="safeHouse" />
               </div>
               <div className="cell"></div>
               <div className="cell"></div>
@@ -379,7 +359,11 @@ const Ludo = () => {
           </div>
         </div>
       </div>
-      <Button onClick={startRound}>Play {gameData.playingColor}</Button>
+
+      <div className="mx-4 w-100">
+        <Dice rollDice={rollDice} diceResult={diceRolled}></Dice>
+        <LudoPlayerIndicatorTable playingColor={currentlyPlaying.color}></LudoPlayerIndicatorTable>
+      </div>
     </div>
   );
 };
