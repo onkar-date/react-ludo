@@ -101,7 +101,6 @@ const Ludo = () => {
           }
         },
       };
-      console.log("updated = ", updated);
       return updated;
     });
     setDiceRolled(null);
@@ -128,8 +127,6 @@ const Ludo = () => {
 
   const getNextPlayingColor = (): string => {
     if (diceRolled !== 6) {
-      console.log('next turn = ', PLAYER_TURNS[PLAYER_TURNS.indexOf(currentlyPlaying.color) + 1] || PLAYER_TURNS[0]);
-
       return PLAYER_TURNS[PLAYER_TURNS.indexOf(currentlyPlaying.color) + 1] || PLAYER_TURNS[0];
     } else {
       return currentlyPlaying.color;
@@ -137,7 +134,26 @@ const Ludo = () => {
   }
 
   const rollDice = () => {
-    const possibleMoves = [1, 2, 3, 4, 5, 6, 6];
+    const possibleMoves = [1, 2, 3, 4, 5, 6];
+    const playingColorData = gameData[currentlyPlaying.color];
+    const trappedPlayers = Object.entries(playingColorData).reduce((prevVal, currentVal) => {
+      if (currentVal[0].includes('player')) {
+        if ((currentVal[1] as any).currentPosition === -1) {
+          return prevVal + 1;
+        } else {
+          return prevVal;
+        }
+      } else {
+        return prevVal;
+      }
+    }, 0);
+    if (trappedPlayers === 4) {
+      possibleMoves.push(6, 6, 6);
+    } else if (trappedPlayers === 3) {
+      possibleMoves.push(6, 6);
+    } else if (trappedPlayers === 2) {
+      possibleMoves.push(6);
+    }
     setDiceRolled(possibleMoves[Math.floor(Math.random() * possibleMoves.length)]);
   }
 
