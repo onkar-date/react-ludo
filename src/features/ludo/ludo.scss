@@ -1,23 +1,58 @@
-$cell-dimension: 45px;
+$cell-dimension: 42px;
 $home-dimension: calc(6 * $cell-dimension);
 $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
+.game {
+    margin-left: calc($cell-dimension);
+    margin-top: calc($cell-dimension);
+}
 .wrapper {
     .section {
         display: flex;
         .playerHome {
             width: $home-dimension;
             height: $home-dimension;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            .innerDiv {
+                height: calc(4 * $cell-dimension);
+                width: calc(4 * $cell-dimension);
+                background-color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                border: 1px solid black;
+                .playerPlaceholder {
+                    width: $cell-dimension;
+                    height: $cell-dimension;
+                    border: 1px solid black;
+                    border-radius: 50%;
+                }
+            }
             &.topGreen {
                 background-color: green;
+                .playerPlaceholder {
+                    background-color: green;
+                }
             }
             &.topYellow {
                 background-color: yellow;
+                .playerPlaceholder {
+                    background-color: yellow;
+                }
             }
             &.bottomRed {
                 background-color: red;
+                .playerPlaceholder {
+                    background-color: red;
+                }
             }
             &.bottomBlue {
                 background-color: blue;
+                .playerPlaceholder {
+                    background-color: blue;
+                }
             }
         }
         .pathColumnSection {
@@ -33,12 +68,172 @@ $winning-area-dimension: calc($home-dimension - (3 * $cell-dimension));
         .cell {
             width: $cell-dimension;
             height: $cell-dimension;
-            border: 1px solid gray;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
     .section.middleSection {
         .winningArea {
             width: $winning-area-dimension;
+            .greenWinArea {
+                position: absolute;
+                border-top: 63px solid transparent;
+                border-left: 63px solid green;
+                border-bottom: 63px solid transparent;
+            }
+            .yellowWinArea {
+                position: absolute;
+                border-left: 63px solid transparent;
+                border-right: 63px solid transparent;
+                border-top: 63px solid yellow;
+            }
+            .blueWinArea {
+                position: absolute;
+                border-bottom: 63px solid transparent;
+                border-top: 63px solid transparent;
+                border-right: 63px solid blue;
+                border-left: 63px solid transparent;
+            }
+            .redWinArea {
+                position: absolute;
+                border-top: 63px solid transparent;
+                border-left: 63px solid transparent;
+                border-right: 63px solid transparent;
+                border-bottom: 63px solid red;
+            }
         }
     }
+}
+
+.player {
+    height: calc($cell-dimension / 1.5);
+    width: calc($cell-dimension / 1.5);
+    border-radius: 50%;
+    border: 3px solid black;
+    position: absolute;
+    transition: all 0.5s ease;
+    &.greenPlayer {
+        background-color: green;
+        &.player-1 {
+            top: 113px;
+            left: 119px;
+        }
+        &.player-2 {
+            top: 113px;
+            left: 189px;
+        }
+        &.player-3 {
+            top: 195px;
+            left: calc($cell-dimension * 2.5 + 14px);
+        }
+        &.player-4 {
+            top: 195px;
+            left: 189px;
+        }
+    }
+    &.yellowPlayer {
+        background-color: yellow;
+        &.player-1 {
+            top: 113px;
+            left: 497px;
+        }
+        &.player-2 {
+            top: 113px;
+            left: 566px;
+        }
+        &.player-3 {
+            top: 195px;
+            left: 497px;
+        }
+        &.player-4 {
+            top: 195px;
+            left: 566px;
+        }
+    }
+    &.bluePlayer {
+        background-color: blue;
+        &.player-1 {
+            top: 490px;
+            left: 497px;
+        }
+        &.player-2 {
+            top: 490px;
+            left: 566px;
+        }
+        &.player-3 {
+            top: 574px;
+            left: 497px;
+        }
+        &.player-4 {
+            top: 574px;
+            left: 566px;
+        }
+    }
+    &.redPlayer {
+        background-color: red;
+        &.player-1 {
+            top: 490px;
+            left: 120px;
+        }
+        &.player-2 {
+            top: 490px;
+            left: 189px;
+        }
+        &.player-3 {
+            top: 574px;
+            left: 120px;
+        }
+        &.player-4 {
+            top: 574px;
+            left: 189px;
+        }
+    }
+}
+
+.safeHouse {
+    z-index: 2;
+}
+
+.greenBg {
+    background-color: green;
+}
+
+.yellowBg {
+    background-color: yellow;
+}
+
+.blueBg {
+    background-color: blue;
+}
+
+.redBg {
+    background-color: red;
+}
+
+.diceResult {
+    width: 50%;
+    height: 200px;
+    border: 1px solid;
+    margin: 2rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+.playerTableWrapper {
+    display: flex;
+    justify-content: center;
+    .playerTable {
+        width: 50%;
+    }
+}
+
+.playerIndicator {
+    height: calc($cell-dimension / 1.5);
+    width: calc($cell-dimension / 1.5);
+    border-radius: 50%;
+    border: 2px solid;
 }
