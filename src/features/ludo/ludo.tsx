@@ -137,7 +137,8 @@ const Ludo = () => {
   }
 
   const rollDice = () => {
-    setDiceRolled(Math.floor(Math.random() * 6) + 1);
+    const possibleMoves = [1, 2, 3, 4, 5, 6, 6];
+    setDiceRolled(possibleMoves[Math.floor(Math.random() * possibleMoves.length)]);
   }
 
   const setPlayerToMove = (colorSelectedForPlaying: string, playerName: string) => {
